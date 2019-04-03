@@ -1,53 +1,71 @@
-from flask import Flask, request
+from flask import Flask, request, abort
 from flask_restful import Resource, Api
 from sqlalchemy import create_engine
 from json import dumps
 from flask_jsonpify import jsonify
+from nanoid import generate
+import re
 
 # db_connect = create_engine('sqlite:///chinook.db') // For DB
 app = Flask(__name__)
 api = Api(app)
+urls = {}
+max_id_size = 10
+regex = re.compile(
+        r'^(?:http)s?://' # http:// or https://
+        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|' #domain...
+        r'localhost|' #localhost...
+        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or ip
+        r'(?::\d+)?' # optional port
+        r'(?:/?|[/?]\S+)$', re.IGNORECASE)
 
 class GetURL(Resource):
-    urls = []
-
     def get(self):
-        return {'id': 301} # Fetches first column that is Employee ID
+        if not 'id' in request.args:
+            return {'keys': urls}, 200 
+        try:
+            id = request.args['id']
+        except:
+            abort(404)
+        return {'value': urls[id]}, 301 
 
 
 class PutURL(Resource):
     def put(self):
-        return {'id': 200} # Fetches first column that is Employee ID
+        try:
+            id = request.args['id']
+            if (id.len > max_id_size or id.len < max_id_size):
+                abort(400)
+        except:
+            abort(404)
+        return {}, 200 
 
 
 class DeleteURL(Resource):
-    def get(self):
-        return {'id': 204} # Fetches first column that is Employee ID
-
-
-class GetKeys(Resource):
-    def get(self):
-        return {'id': 200} # Fetches first column that is Employee ID
+    def delete(self):
+        if not 'id' in request.args:
+            return {}, 204
+        try:
+            id = request.args['id']
+            del urls[id]
+        except:
+            abort(404)
+        return {}, 204
 
 
 class NewUrl(Resource):
-    def get(self):
-        return {'id': 201} # Fetches first column that is Employee ID
+    def post(self):
+        if not re.match(regex, request.args['url']): # check if input is URL
+            abort(400)
+        id = generate(size=max_id_size)
+        urls[id] = request.args['url']
+        return {'id': id}, 201
 
 
-class RemoveURL(Resource):
-    def get(self):
-        return {'id': 204} # Fetches first column that is Employee ID
-
-
-api.add_resource(GetURL, '/id') # Set ID parameter
-api.add_resource(PutURL, '/id') # Set ID parameter
-api.add_resource(DeleteURL, '/id') # Set ID parameter
-api.add_resource(GetKeys, '/') # Set ID parameter
+api.add_resource(GetURL, '/') # Set ID parameter
+api.add_resource(PutURL, '/') # Set ID parameter
+api.add_resource(DeleteURL, '/') # Set ID parameter
 api.add_resource(NewUrl, '/') # Set ID parameter
-api.add_resource(RemoveURL, '/') # Set ID parameter
-
-
 
 
 if __name__ == '__main__':
