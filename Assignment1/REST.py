@@ -34,7 +34,7 @@ class PutURL(Resource):
     def put(self):
         try:
             id = request.args['id']
-            if (id.len > max_id_size or id.len < max_id_size):
+            if (len(id) > max_id_size or len(id) < max_id_size):
                 abort(400)
         except:
             abort(404)
