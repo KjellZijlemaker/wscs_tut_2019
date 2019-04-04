@@ -1,6 +1,6 @@
 # Web Services and Cloud-Based Systems
 
-Assignments for Web Services and Cloud-Based Systems course @ VU Amsterdam
+Assignments for Web Services and Cloud-Based Systems course @ University of Amsterdam
 
 ## Getting Started
 
