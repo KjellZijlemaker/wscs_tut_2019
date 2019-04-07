@@ -2,11 +2,17 @@
 
 Write a   Calculator Web  service using   the two methods you have learned 
 (Bottom-up  or  Top-Down). Write the respective  clients to  call your service in each case. Implement a web service using Java API for XML Web Services(JAX-WS) with    the following   interface:
+
 § method    add for addition
+
 § method    sub for substraction
+
 § method    mul for multiplication
+
 § method    div for division
+
 o Calculator    should  operate on  real numbers
+
 o Web   service should  communicate using   SOAP    protocol
 
 ## Getting Started
@@ -46,6 +52,8 @@ The following command generates the Java classes needed to write the client:
 ```
 wsimport -keep -p client calculator.wsdl
 ```
+
+We have written the java client (CalculatorClient.java)
 
 To compile & run the client:
 ```
