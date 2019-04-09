@@ -16,7 +16,6 @@ regex = re.compile(
         r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|' #domain...
         r'localhost|' #localhost...
         r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or ip
-        r'(?::\d+)?' # optional port
         r'(?:/?|[/?]\S+)$', re.IGNORECASE)
 
 class GetURL(Resource):
@@ -62,10 +61,11 @@ class NewUrl(Resource):
         return {'id': id}, 201
 
 
-api.add_resource(GetURL, '/') # Set ID parameter
-api.add_resource(PutURL, '/') # Set ID parameter
-api.add_resource(DeleteURL, '/') # Set ID parameter
-api.add_resource(NewUrl, '/') # Set ID parameter
+# Set resource pointers
+api.add_resource(GetURL, '/')
+api.add_resource(PutURL, '/')
+api.add_resource(DeleteURL, '/') 
+api.add_resource(NewUrl, '/') 
 
 
 if __name__ == '__main__':
