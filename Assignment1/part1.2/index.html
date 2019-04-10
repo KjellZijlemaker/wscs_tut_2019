@@ -25,6 +25,8 @@
 </body>
 <script>
 var serverurl = "http://localhost:5002/";
+
+// Get all keys from server
 $(document).ready(function(){
      $.ajax({
            type: "GET",
@@ -32,11 +34,13 @@ $(document).ready(function(){
            success: function(res){
                $.each(res.keys, function(key, val){
                     $('#results').append("id: " + key + " value: " + val + 
-                    " <button id = 'remove_id' value = '" + key + "'>Remove</button> <br />")
+                    " <button id = 'remove_id' value = '" + key + "'>Remove</button>"
+                +   " <button id = 'edit_id' value = '" + key + "'>Edit</button> <br />")
+
                });
            },
            error: function(res){
-               if(res.status) == 404{
+               if(res.status == 404){
                    alert("URL not found on server")
                }
            }
@@ -54,11 +58,46 @@ $(document).on('click','#remove_id',function(button){
             location.reload();
         },
         error: function(result){
-            if(result.status) == 404{
+            if(result.status == 404){
                    alert("URL not found on server")
                }
         }
     });
+});
+
+// Editing URL with PUT
+$(document).on('click','#edit_id',function(button){
+    $('#results').empty();
+    $('#results').append('<h2>Edit URL</h2>' +
+    '<form method="PUT" action="http://localhost:5002/"' 
+    + 'id="put_form"><input type="text" id="editid" name="editid">'
+    + '<input type="submit" id="edit2" value="Edit"></form>')
+
+    $("#put_form").submit(function(e) {
+        console.log('tets')
+         e.preventDefault(); // avoid to execute the actual submit of the form.
+
+    var form = $(this);
+    var url = form.attr('action');
+    $.ajax({
+        url: serverurl + '?id=' + button.currentTarget.value,
+        type: 'PUT',
+        data: "url=" + form[0][0].value,
+        success: function(result) {
+            alert("Updated key!")
+            location.reload();
+        },
+        error: function(result){
+            if(result.status == 400){
+                   alert("Not found on server")
+               }
+            else{
+                alert("This is not a correct URL")
+            }
+        }
+    });
+    });
+   
 });
 
 
@@ -78,17 +117,17 @@ e.preventDefault(); // avoid to execute the actual submit of the form.
         {
             alert("URL added to server. Your unique ID is: " + data.id); // show response from the php script.
             $('#results').append("id: " + data.id + " value: " + jQuery("#url").val() + 
-                    " <button id = 'remove_id' value = '" + data.id + "'>Remove</button> <br />")
+                    " <button id = 'remove_id' value = '" + data.id + "'>Remove</button>"
+                +   " <button id = 'edit_id' value = '" + data.id + "'>Edit</button> <br />")
         },
         error: function(data)
         {
             if(data.status == 400){
-                alert("the server does not understand request")
+                alert("This is not an URL..")
             }
             
         }
         });
-    
 });
 
 // Getting original url from ID

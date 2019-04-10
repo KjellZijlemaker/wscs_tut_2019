@@ -3,10 +3,9 @@ from flask_restful import Resource, Api
 from sqlalchemy import create_engine
 from json import dumps
 from flask_jsonpify import jsonify
-from nanoid import generate
+from nanoid import generate # To generate small ID's
 import re
 
-# db_connect = create_engine('sqlite:///chinook.db') // For DB
 app = Flask(__name__)
 api = Api(app)
 urls = {}
@@ -33,8 +32,9 @@ class PutURL(Resource):
     def put(self):
         try:
             id = request.args['id']
-            if (len(id) > max_id_size or len(id) < max_id_size):
+            if not re.match(regex, request.form['url']): # check if input is URL
                 abort(400)
+            urls[id] = request.form['url']
         except:
             abort(404)
         return {}, 200 
