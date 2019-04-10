@@ -13,20 +13,20 @@ urls = {}
 max_id_size = 10
 regex = re.compile(
         r'^(?:http)s?://' # http:// or https://
-        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|' #domain...
-        r'localhost|' #localhost...
-        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or ip
-        r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|' #domain lookup
+        r'localhost|' # Localhost can be looked up
+        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # IP can be looked up
+        r'(?:/?|[/?]\S+)$', re.IGNORECASE) # Can be put in upper case
 
 class GetURL(Resource):
     def get(self):
         if not 'id' in request.args:
-            return {'keys': urls}, 200 
+            return {'keys': urls}, 201 
         try:
             id = request.args['id']
         except:
             abort(404)
-        return {'value': urls[id]}, 301 
+        return {'value': urls[id]}, 200 
 
 
 class PutURL(Resource):
@@ -54,10 +54,10 @@ class DeleteURL(Resource):
 
 class NewUrl(Resource):
     def post(self):
-        if not re.match(regex, request.args['url']): # check if input is URL
+        if not re.match(regex, request.form['url']): # check if input is URL
             abort(400)
         id = generate(size=max_id_size)
-        urls[id] = request.args['url']
+        urls[id] = request.form['url']
         return {'id': id}, 201
 
 
