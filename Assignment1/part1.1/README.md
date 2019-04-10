@@ -56,6 +56,11 @@ wsimport -keep -p client calculator.wsdl
 We have written the java client (CalculatorClient.java)
 
 To compile & run the client (make sure that Java 8 is used and the web service is deployed and up and running through Netbeans):
+
+From root directory
+```
+cd client
+```
 ```
 javac CalculatorClient.java
 ```
