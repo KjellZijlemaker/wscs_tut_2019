@@ -74,28 +74,28 @@ $(document).on('click','#edit_id',function(button){
     + '<input type="submit" id="edit2" value="Edit"></form>')
 
     $("#put_form").submit(function(e) {
-        console.log('tets')
-         e.preventDefault(); // avoid to execute the actual submit of the form.
+    
+        e.preventDefault(); // avoid to execute the actual submit of the form.
 
-    var form = $(this);
-    var url = form.attr('action');
-    $.ajax({
-        url: serverurl + '?id=' + button.currentTarget.value,
-        type: 'PUT',
-        data: "url=" + form[0][0].value,
-        success: function(result) {
-            alert("Updated key!")
-            location.reload();
-        },
-        error: function(result){
-            if(result.status == 400){
-                   alert("Not found on server")
-               }
-            else{
-                alert("This is not a correct URL")
+        var form = $(this);
+        var url = form.attr('action');
+        $.ajax({
+            url: serverurl + '?id=' + button.currentTarget.value,
+            type: 'PUT',
+            data: "url=" + form[0][0].value, // Get the form url value
+            success: function(result) {
+                alert("Updated key!")
+                location.reload();
+            },
+            error: function(result){
+                if(result.status == 400){
+                    alert("Not found on server")
+                }
+                else{
+                    alert("This is not a correct URL")
+                }
             }
-        }
-    });
+        });
     });
    
 });
@@ -104,7 +104,7 @@ $(document).on('click','#edit_id',function(button){
 // Submitting the url to shorten
 $("#post_form").submit(function(e) {
 
-e.preventDefault(); // avoid to execute the actual submit of the form.
+    e.preventDefault(); // avoid to execute the actual submit of the form.
 
     var form = $(this);
     var url = form.attr('action');
@@ -112,7 +112,7 @@ e.preventDefault(); // avoid to execute the actual submit of the form.
     $.ajax({
         type: "POST",
         url: url,
-        data: form.serialize(), // serializes the form's elements.
+        data: form.serialize(), // Get the data from form
         success: function(data)
         {
             alert("URL added to server. Your unique ID is: " + data.id); // show response from the php script.
@@ -130,26 +130,30 @@ e.preventDefault(); // avoid to execute the actual submit of the form.
         });
 });
 
-// Getting original url from ID
+/** Getting original url from ID
+Please note that this can also be done by using: localhost:5002/?id=....
+for testing the REST server directly **/
 $("#search_form").submit(function(e) {
     var form = $(this);
     var url = form.attr('action');
     e.preventDefault(); // avoid to execute the actual submit of the form.
          $.ajax({
            type: "GET",
-           url: url + "?id=" + form[0][0].value,
+           url: url + "?id=" + form[0][0].value, // Get specific value from form 
            success: function(res){
                alert("Your original URL is: " + res.value);
            },
            error: function(res){
-               alert("Something went wrong..")
+               if(res.status == 301){
+                    alert("Redirecting to..." + res.responseJSON.value)
+               }
+               else if(res.status == 404){
+                   alert("ID is not found on server")
+               }
+              
            }
            
          });
 });
-
-
-
-
 </script>
 </html>
