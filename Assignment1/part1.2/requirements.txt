@@ -1,5 +1,5 @@
 flask
 flask_restful
-sqalchemy
+sqlalchemy
 flask_jsonpify
 nanoid
