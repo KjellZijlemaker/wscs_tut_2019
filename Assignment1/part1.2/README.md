@@ -26,6 +26,8 @@ pip3 install -r requirements.txt
 ```
 
 ### Setup, deploy & test the URL shortener web service
-
+The REST server can be deployed on any server supporting Python. Extract the REST.py file in any directory where the server has access.
+To run the REST server, run the REST.py file from the command line with Python or create an automated script which will call the script at server startup. The REST server will be listening on localhost:5002.
 
 ### Setup & run the client for the web service
+Extract the index.html in a directory of the client server, which can be a simple HTTP server running on port 80. Finally, open the URL on which the index file is hosted in a web browser and make sure the REST server is running. Also make sure that CORS is enabled everywhere, or make sure that both the client and REST server are hosted on the same domain to prevent Cross Origin Requests.  
