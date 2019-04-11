@@ -44,8 +44,7 @@ $(document).ready(function(){
                    alert("URL not found on server")
                }
            }
-         });
-
+      });
 });
 
 // Removing URL
@@ -60,7 +59,7 @@ $(document).on('click','#remove_id',function(button){
         error: function(result){
             if(result.status == 404){
                    alert("URL not found on server")
-               }
+            }
         }
     });
 });
@@ -74,9 +73,7 @@ $(document).on('click','#edit_id',function(button){
     + '<input type="submit" id="edit2" value="Edit"></form>')
 
     $("#put_form").submit(function(e) {
-    
         e.preventDefault(); // avoid to execute the actual submit of the form.
-
         var form = $(this);
         var url = form.attr('action');
         $.ajax({
@@ -96,38 +93,34 @@ $(document).on('click','#edit_id',function(button){
                 }
             }
         });
-    });
-   
+    });  
 });
 
 
 // Submitting the url to shorten
 $("#post_form").submit(function(e) {
-
     e.preventDefault(); // avoid to execute the actual submit of the form.
-
     var form = $(this);
     var url = form.attr('action');
-        
     $.ajax({
-        type: "POST",
-        url: url,
-        data: form.serialize(), // Get the data from form
-        success: function(data)
-        {
-            alert("URL added to server. Your unique ID is: " + data.id); // show response from the php script.
-            $('#results').append("id: " + data.id + " value: " + jQuery("#url").val() + 
-                    " <button id = 'remove_id' value = '" + data.id + "'>Remove</button>"
-                +   " <button id = 'edit_id' value = '" + data.id + "'>Edit</button> <br />")
-        },
-        error: function(data)
-        {
-            if(data.status == 400){
-                alert("This is not an URL..")
-            }
-            
-        }
-        });
+      type: "POST",
+      url: url,
+      data: form.serialize(), // Get the data from form
+      success: function(data)
+      {
+          alert("URL added to server. Your unique ID is: " + data.id); // show response from the php script.
+          $('#results').append("id: " + data.id + " value: " + jQuery("#url").val() + 
+                  " <button id = 'remove_id' value = '" + data.id + "'>Remove</button>"
+              +   " <button id = 'edit_id' value = '" + data.id + "'>Edit</button> <br />")
+      },
+      error: function(data)
+      {
+          if(data.status == 400){
+              alert("This is not an URL..")
+          }
+
+      }
+    });
 });
 
 /** Getting original url from ID
@@ -137,24 +130,24 @@ $("#search_form").submit(function(e) {
     var form = $(this);
     var url = form.attr('action');
     e.preventDefault(); // avoid to execute the actual submit of the form.
-         $.ajax({
-           type: "GET",
-           url: url + "?id=" + form[0][0].value, // Get specific value from form 
-           success: function(res){
-               alert("Your original URL is: " + res.value);
-           },
-           error: function(res){
-               if(res.status == 301){
-                    alert("Redirecting to..." + res.responseJSON.value)
-                    window.location.replace(res.responseJSON.value);
-               }
-               else if(res.status == 404){
-                   alert("ID is not found on server")
-               }
-              
-           }
-           
-         });
+    $.ajax({
+      type: "GET",
+      url: url + "?id=" + form[0][0].value, // Get specific value from form 
+      success: function(res){
+          alert("Your original URL is: " + res.value);
+      },
+      error: function(res){
+          if(res.status == 301){
+               alert("Redirecting to..." + res.responseJSON.value)
+               window.location.replace(res.responseJSON.value);
+          }
+          else if(res.status == 404){
+              alert("ID is not found on server")
+          }
+
+      }
+
+    });
 });
 </script>
 </html>
