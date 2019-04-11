@@ -146,6 +146,7 @@ $("#search_form").submit(function(e) {
            error: function(res){
                if(res.status == 301){
                     alert("Redirecting to..." + res.responseJSON.value)
+                    window.location.replace(res.responseJSON.value);
                }
                else if(res.status == 404){
                    alert("ID is not found on server")
