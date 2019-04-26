@@ -43,7 +43,7 @@ onetemplate list
 
 Check for the template ID/name and instatinate the VM (make sure to use persistent mode)
 ```
-onetemplate instantiate template_name --persistent --name_of_VM
+onetemplate instantiate template_name --persistent --name name_of_VM
 ```
 
 Your VM is now instatinated. You can check by:
