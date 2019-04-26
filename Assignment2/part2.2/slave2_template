@@ -1,0 +1,21 @@
+CONTEXT=[
+  FILES="/var/scratch/yhu/file.sh",
+  NETWORK="yes",
+  SSH_PUBLIC_KEY="ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBL8XF4nv+NsQEWj8c5/xj4jW+QtMS6MYeXhrrKASl1iW9pS3ZlQOQKCABRgByVRS6vC4Fl+CndB+xuovC76CzFA= wscs1904@fs0",
+  START_SCRIPT="#!/bin/bash
+sh file.sh" ]
+CPU="1"
+DISK=[
+  DRIVER="qcow2",
+  IMAGE_ID="1136" ]
+GRAPHICS=[
+  LISTEN="0.0.0.0",
+  TYPE="vnc" ]
+MEMORY="8096"
+NIC=[
+  IP="10.100.0.64",
+  NETWORK_ID="1" ]
+OS=[
+  ARCH="x86_64" ]
+VCPU="4"
+
