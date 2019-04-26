@@ -13,7 +13,7 @@ These instructions will get you a copy of the solution up and running on your lo
 Before running the service and creating the VM, you must have access to the following system and install 
 requirements:
 
-Access with OpenNebula installed**DAS-4**
+Access with OpenNebula installed **DAS-4**
 
 **APACHE Lamp Server** (once VM is created, set it up there)
 
