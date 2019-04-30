@@ -1,5 +1,5 @@
 flask
 flask_restful
-sqalchemy==1.3.2
+sqlalchemy
 flask_jsonpify
 nanoid
