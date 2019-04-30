@@ -16,5 +16,5 @@ EXPOSE 80
 # Define environment variable
 ENV NAME World
 
-# Run app.py when the container launches
+# Run REST.py when the container launches
 CMD ["python3", "REST.py"]
