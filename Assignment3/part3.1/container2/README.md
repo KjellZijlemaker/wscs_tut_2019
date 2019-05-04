@@ -28,7 +28,7 @@ Access with Docker installed **DAS-4**
 
 ### Setup, deploy VM & access VM
 
-There is already a Dockerfile defined. Build the image from the Dockerfile. To test the commands between two containers, create two images. Second image is placed in /container2/. For example:
+There is already a Dockerfile defined. Build the image from the Dockerfile. For example:
 
 ```
 docker build --tag=url-shortener .
@@ -62,45 +62,4 @@ docker container start URL
 SSH inside container:
 ```
 docker exec -it URL /bin/bash
-```
-
-Check for IP address of container (when inside container - see previous step):
-```
-ip addr show
-```
-
-iperf3 usage between 2 containers (iperf is already installed inside container due to Dockerfile):
-
-Server (in first container)
-```
-iperf3 -s
-```
-
-Client (in second container, replace ip_addr with server container address)
-```
-iperf3 -c 172.17.0.2
-```
-
-socat usage between 2 containers (socat is already installed inside container due to Dockerfile):
-
-Server (in first container)
-```
-socat tcp-l:7777,reuseaddr,fork system:'echo hello; sleep 5; echo goodbye',nofork
-```
-
-Client (in second container, replace ip_addr with server container address)
-```
-socat tcp:172.17.0.2:7777 -
-```
-
-netcat usage between 2 containers (netcat is already installed inside container due to Dockerfile):
-
-Server (in first container, provide port number)
-```
-nc -l -p 55
-```
-
-Client (in second container, replace ip_addr with server container address)
-```
-nc 172.17.0.2 55
 ```

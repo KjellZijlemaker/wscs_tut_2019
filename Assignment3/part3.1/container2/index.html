@@ -1,0 +1,142 @@
+ <!doctype html>
+<html>
+<head>
+<script type="text/javascript" src="start.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+<div id = "add_url">
+<h2>Shorten URL</h2>
+  <form method="POST" action="http://127.0.0.1:5002/" id="post_form">
+      <input type="text" id="url" name="url">
+      <input type="submit" id="submit" value="Submit">
+    </form>
+</div>
+<div id="results">
+<h2>Existing keys: </h2>
+</div>
+<div id = "geturl">
+<h2>Get URL</h2>
+  <form method="GET" action="http://127.0.0.1:5002/" id="search_form">
+      <input type="text" id="id" name="id">
+      <input type="submit" id="submit" value="Submit">
+    </form>
+</div>
+</body>
+<script>
+var serverurl = "http://127.0.0.1:5002/";
+// Get all keys from server
+$(document).ready(function(){
+     $.ajax({
+           type: "GET",
+           url: serverurl,
+           success: function(res){
+               $.each(res.keys, function(key, val){
+                    $('#results').append("id: " + key + " value: " + val + 
+                    " <button id = 'remove_id' value = '" + key + "'>Remove</button>"
+                +   " <button id = 'edit_id' value = '" + key + "'>Edit</button> <br />")
+               });
+           },
+           error: function(res){
+               if(res.status == 404){
+                   alert("URL not found on server")
+               }
+           }
+      });
+});
+// Removing URL
+$(document).on('click','#remove_id',function(button){
+    $.ajax({
+        url: serverurl + '?id=' + button.currentTarget.value,
+        type: 'DELETE',
+        success: function(result) {
+            alert("Removed key!")
+            location.reload();
+        },
+        error: function(result){
+            if(result.status == 404){
+                   alert("URL not found on server")
+            }
+        }
+    });
+});
+// Editing URL with PUT
+$(document).on('click','#edit_id',function(button){
+    $('#results').empty();
+    $('#results').append('<h2>Edit URL</h2>' +
+    '<form method="PUT" action="http://127.0.0.1:5002/"' 
+    + 'id="put_form"><input type="text" id="editid" name="editid">'
+    + '<input type="submit" id="edit2" value="Edit"></form>')
+    $("#put_form").submit(function(e) {
+        e.preventDefault(); // avoid to execute the actual submit of the form.
+        var form = $(this);
+        var url = form.attr('action');
+        $.ajax({
+            url: serverurl + '?id=' + button.currentTarget.value,
+            type: 'PUT',
+            data: "url=" + form[0][0].value, // Get the form url value
+            success: function(result) {
+                alert("Updated key!")
+                location.reload();
+            },
+            error: function(result){
+                if(result.status == 400){
+                    alert("Not found on server")
+                }
+                else{
+                    alert("This is not a correct URL")
+                }
+            }
+        });
+    });  
+});
+// Submitting the url to shorten
+$("#post_form").submit(function(e) {
+    e.preventDefault(); // avoid to execute the actual submit of the form.
+    var form = $(this);
+    var url = form.attr('action');
+    $.ajax({
+      type: "POST",
+      url: url,
+      data: form.serialize(), // Get the data from form
+      success: function(data)
+      {
+          alert("URL added to server. Your unique ID is: " + data.id); // show response from the php script.
+          $('#results').append("id: " + data.id + " value: " + jQuery("#url").val() + 
+                  " <button id = 'remove_id' value = '" + data.id + "'>Remove</button>"
+              +   " <button id = 'edit_id' value = '" + data.id + "'>Edit</button> <br />")
+      },
+      error: function(data)
+      {
+          if(data.status == 400){
+              alert("This is not an URL..")
+          }
+      }
+    });
+});
+/** Getting original url from ID
+Please note that this can also be done by using: localhost:5002/?id=....
+for testing the REST server directly **/
+$("#search_form").submit(function(e) {
+    var form = $(this);
+    var url = form.attr('action');
+    e.preventDefault(); // avoid to execute the actual submit of the form.
+    $.ajax({
+      type: "GET",
+      url: url + "?id=" + form[0][0].value, // Get specific value from form 
+      success: function(res){
+          alert("Your original URL is: " + res.value);
+      },
+      error: function(res){
+          if(res.status == 301){
+               alert("Redirecting to..." + res.responseJSON.value)
+               window.location.replace(res.responseJSON.value);
+          }
+          else if(res.status == 404){
+              alert("ID is not found on server")
+          }
+      }
+    });
+});
+</script>
+</html>
