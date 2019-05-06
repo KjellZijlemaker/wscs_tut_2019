@@ -31,17 +31,17 @@ Access with Docker installed **DAS-4**
 There is already a Dockerfile defined. Build the image from the Dockerfile. For example:
 
 ```
-docker build --tag=url-shortener .
+docker build --tag=url-shortener2 .
 ```
 
 Now you can run the URL Shortener service and create a URL container by specifying the --name option:
 ```
-docker run -p 4000:80 --name URL url-shortener
+docker run -p 5002:81 --name URL2 url-shortener2
 ```
 
 Go to that URL in a web browser to see the display content served up on a web page.
 ```
-http://localhost:4000
+http://localhost:5002
 ```
 
 You can view docker images
@@ -56,10 +56,10 @@ docker ps
 
 In order to access your docker container via SSH, first, start the container:
 ```
-docker container start URL
+docker container start URL2
 ```
 
 SSH inside container:
 ```
-docker exec -it URL /bin/bash
+docker exec -it URL2 /bin/bash
 ```
