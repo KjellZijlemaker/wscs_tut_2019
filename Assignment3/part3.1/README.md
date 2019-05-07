@@ -104,3 +104,4 @@ Client (in second container, replace ip_addr with server container address)
 ```
 nc 172.17.0.2 55
 ```
+You can now start sending messages from server -> client & client -> server. To exit, press ctr+c
