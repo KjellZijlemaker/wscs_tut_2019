@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: urlshortener
+  labels:
+    app: urlshortener
+  namespace: urlshortener
+  annotations:
+    monitoring: "true"
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: urlshortener
+  template:
+    metadata:
+      labels:
+        app: urlshortener
+    spec:
